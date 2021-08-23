@@ -1,21 +1,50 @@
 <!DOCTYPE html>
 <meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 <html>
     <head>
         <style>
             canvas {
-                border: 10px solid lightgreen;
-                background-color: black;
-                position: relative;
+                border: 20px solid;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
             }
             body {
                 margin: 0;
                 background-color: rgb(69, 8, 75);
             }
+            footer {
+                padding: 10px;
+                text-align: center;
+            }
+            .center {
+                text-align: center;
+            }
         </style>
     </head>
-    <body>
-        <canvas></canvas>
+    <body class="center">
+        <div class="title">
+            <h1>~S~N~A~K~E~</h1>
+        </div>
+        <div>
+            <canvas id='snake'></canvas>
+            <div id="points"></div>
+        </div>
+        <div class="slideconteiner">
+            <input type="range" class="slider" id="speedSlider">
+        </div>
+        
+        <footer>
+           <h1>
+              UP <kbd>w</kbd>
+              DOWN <kbd>s</kbd>
+              LEFT <kbd>a</kbd>
+              RIGHT <kbd>d</kbd>
+           </h1> 
+        </footer>
+        
+        
         <div id="mouse"></div>
         <script src="snake.js"></script>
         
