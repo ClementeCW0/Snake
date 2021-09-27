@@ -25,7 +25,7 @@ canvas.width = canvasWidth;
 canvas.height = canvasHeight;
 const cellStates = {
     dead: '#F2D6A2',
-    food: 'red',
+    food: 'orange',
     snake: '#A6926D'
 }
 const enviormentColors = {
@@ -96,7 +96,7 @@ class Snake{
         }
     }
     eat(){
-        let biteSoundFile = `Sounds/bite${Math.floor((1 + 18 * Math.arandom()))}.wav`
+        let biteSoundFile = `Sounds/bite${Math.floor((1 + 18 * Math.random()))}.wav`
         console.log(biteSoundFile)
         let bite = new Audio(biteSoundFile)
         bite.play()
@@ -118,10 +118,8 @@ class Snake{
         let predeterminedNewTail = [tail[0] + predeterminedArrow[0], tail[1] + predeterminedArrow[1]]
         if(mapObj[predeterminedNewTail] != undefined && mapObj[predeterminedNewTail].state != 'snake'){
             this.cells.unshift(predeterminedNewTail)
-            console.log('hello')
             growed = true
         }
-        console.log(mapObj[predeterminedNewTail])
         arrows -= predeterminedArrow
         while(!growed && i < arrows.length){
             let cell = [tail[0] + arrows[i][0], tail[1] + arrows[i][1]]
