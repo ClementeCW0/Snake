@@ -3,8 +3,6 @@ let pointsDiv = document.getElementById('points')
 let speedSlider = document.getElementById('speedSlider')
 let maxPoints = 0
 
-
-
 /////////////////////////////////////////////////////////////////
 let cellSide = 25; // ------------------------------------------- pixels of a cell
 let rows = 25 // ------------------------------------------------ rows of the canvas
@@ -17,6 +15,7 @@ let body = [                 //
     head                     //
 ]                            //
 /////////////////////////////////////////////////////////////////
+
 speedSlider.min = 0
 speedSlider.max = minSpeed
 speedSlider.value =  4 * minSpeed / 5
@@ -25,13 +24,13 @@ let canvasHeight = rows * cellSide;
 canvas.width = canvasWidth;
 canvas.height = canvasHeight;
 const cellStates = {
-    dead: '#67BC9A',
-    food: '#F8F2AB',
-    snake: '#B4D6A4'
+    dead: '#F2D6A2',
+    food: 'red',
+    snake: '#A6926D'
 }
 const enviormentColors = {
-    pageBackGround: '#0071A7', 
-    border: '#13B0A5'
+    pageBackGround: '#353D40', 
+    border: '#BFA87E'
 }
 let pageBody = document.querySelector('body')
 pageBody.style.backgroundColor = enviormentColors.pageBackGround
@@ -65,12 +64,11 @@ class Cell{
     draw(){
         c.fillStyle = cellStates[this.state]
         c.fillRect(this.x, this.y, cellSide, cellSide);
-        c.strokeStyle = 'white'
-        c.stroke()
         c.fill()
     };
 };
-mapObj = {}
+
+mapObj = {} // Object to contain the cells
 for(let row = 0; row < rows; row++){
     for(let column = 0; column < columns; column++){
         mapObj[[row, column]] = new Cell(column * cellSide, row * cellSide) 
@@ -98,7 +96,10 @@ class Snake{
         }
     }
     eat(){
-        console.log('yummy!')
+        let biteSoundFile = `Sounds/bite${Math.floor((1 + 18 * Math.arandom()))}.wav`
+        console.log(biteSoundFile)
+        let bite = new Audio(biteSoundFile)
+        bite.play()
         let growed = false // check if the snake was able to unshift a new tail
         let tail = this.cells[0]
         let preTail = this.cells[1]
@@ -113,7 +114,15 @@ class Snake{
         ]
         // First check if the tail is available //
         let i = 0
-        let predeterminedArrow = []
+        let predeterminedArrow = [tail[0] - preTail[0], tail[1] - preTail[1]]
+        let predeterminedNewTail = [tail[0] + predeterminedArrow[0], tail[1] + predeterminedArrow[1]]
+        if(mapObj[predeterminedNewTail] != undefined && mapObj[predeterminedNewTail].state != 'snake'){
+            this.cells.unshift(predeterminedNewTail)
+            console.log('hello')
+            growed = true
+        }
+        console.log(mapObj[predeterminedNewTail])
+        arrows -= predeterminedArrow
         while(!growed && i < arrows.length){
             let cell = [tail[0] + arrows[i][0], tail[1] + arrows[i][1]]
             if(mapObj[cell] != undefined && mapObj[cell].state != 'snake'){
@@ -208,20 +217,18 @@ class Snake{
             }
 
             if(!this.dead){
-                let deceised = this.cells.shift()
+                let deceised = this.cells.shift() // Remove the tail of the snakes body
                 mapObj[deceised].state = 'dead'
-                mapObj[deceised].draw()
-                this.cells.push(newHead)
+                mapObj[deceised].draw() // Removed cell goes back to background color 
+                this.cells.push(newHead) // Add new head cell to the end of the body list
                 if(newHead != undefined){
+                    // Check if the snake hit itself or found food
                     switch(mapObj[newHead].state){
                         case 'snake':
                             this.die()
                             break
                         case 'food':
                             this.eat()
-                    }
-                    if(mapObj[newHead].state == 'snake'){
-                        this.dead = true
                     }
                     this.draw()
                 }
@@ -313,5 +320,3 @@ addEventListener(
 )
 
 animate()
-
-//Test change for github
